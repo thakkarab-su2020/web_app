@@ -1,5 +1,4 @@
 # web-app
-# web-app
 
 # Django
 
