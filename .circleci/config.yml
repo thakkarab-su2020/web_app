@@ -8,7 +8,7 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD: 0072707
           MYSQL_DATABASE: my_database
-          MYSQL_USER: root
+          MYSQL_USER: abhi
           MYSQL_PASSWORD: 0072707
     steps:
       - checkout
