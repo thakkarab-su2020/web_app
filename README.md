@@ -2,7 +2,7 @@
 
 # Django-APP
 
-django is a Python framework that follows model-template-view architecturl pattern.
+Django is a Python framework that follows model-template-view architecturl pattern.
 
 ## Installation
 
