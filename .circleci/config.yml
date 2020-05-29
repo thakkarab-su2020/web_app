@@ -10,11 +10,11 @@ jobs:
           POSTGRES_USER: Abhi
           POSTGRES_DB: postgres
           POSTGRES_PASSWORD: 0072707
+
     steps:
       - checkout
       - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-      
+          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}      
       - run: sudo apt-get install postgresql-client
       - run:
           name: Waiting for PostgreSQL to start
