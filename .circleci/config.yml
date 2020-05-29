@@ -4,47 +4,44 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.8.3
-      - image: circleci/mysql:8.0.4
+      
+      - image: circleci/postgres:9.6.5-alpine-ram
         environment:
-          MYSQL_ROOT_PASSWORD: 0072707
-          MYSQL_DATABASE: my_database
-          MYSQL_USER: abhi
-          MYSQL_PASSWORD: 0072707
+          POSTGRES_USER: Abhi
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: 0072707
     steps:
       - checkout
       - restore_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      
+      - run: sudo apt-get install postgresql-client
       - run:
+          name: Waiting for PostgreSQL to start
           command: |
             for i in `seq 1 10`;
             do
-              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              nc -z localhost 5432 && echo Success && exit 0
               echo -n .
-              sleep 1
+              sleep 2
             done
-            echo Failed waiting for MySQL && exit 1
+            echo Failed waiting for Postgres && exit 1
       - run:
           command: |
-            python3 -m venv venv
+            python -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-            sudo apt-get install mariadb-client
-            sudo apt-get install libsqlclient-dev
-            sudo apt-get install libssl-dev
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - "venv"
+   
       - run:
           name: Running tests
           command: |
             . venv/bin/activate
-            # mysql -h 127.0.0.1 -u abhi -p 0072707 my_database <<< "ALTER USER 'abhi'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '0072707';"
-            mysql --host=127.0.0.1 --user=abhi --password=0072707 -e "ALTER USER 'abhi'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '0072707';"
             cd myproject
             python3 manage.py test
       - store_artifacts:
           path: test-reports/
           destination: python_app
-
-
