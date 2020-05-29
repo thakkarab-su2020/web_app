@@ -39,7 +39,8 @@ jobs:
           name: Running tests
           command: |
             . venv/bin/activate
-            mysql -h 127.0.0.1 -u abhi -p 0072707 my_database -e "ALTER USER 'abhi'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '0072707';"
+            # mysql -h 127.0.0.1 -u abhi -p 0072707 my_database <<< "ALTER USER 'abhi'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '0072707';"
+            mysql --host=127.0.0.1 --user=abhi --password=0072707 -e "ALTER USER 'abhi'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '0072707';"
             cd myproject
             python3 manage.py test
       - store_artifacts:
