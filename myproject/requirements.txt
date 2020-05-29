@@ -4,6 +4,7 @@ cffi==1.14.0
 Django==3.0.6
 django-crispy-forms==1.9.1
 mysqlclient==1.4.6
+psycopg2-binary==2.8.5
 pycparser==2.20
 pytz==2020.1
 six==1.15.0
