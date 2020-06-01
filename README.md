@@ -1,6 +1,6 @@
 # web-app
 
-# Django-APP
+# Django-APP-Project
 
 django is a Python framework that follows model-template-view architecturl pattern.
 
