@@ -1,6 +1,21 @@
-	
-	{% extends "ui/base.html"%}
-	{% block content %}
-		<h1>Welcome to the site</h1>
-	{% endblock content %}
-	
+{% extends "ui/base.html" %}
+{% block content %}
+    {% for book in books %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">Seller: {{ book.seller.first_name }}</a>
+              <small class="text-muted">{{ book.update_date}}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'book-detail' book.id%}">Title: {{ book.title }}</a></h2>
+
+            <p class="article-content">Authors: {{ book.authors }}</p>
+            <p class="article-content">Price: {{ book.price }}</p>
+            {% if book.quantity == 0 %}
+            <span class="badge badge-pill badge-info">Out of stock</span>
+            {% endif %}
+
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
