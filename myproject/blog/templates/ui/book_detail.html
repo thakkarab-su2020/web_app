@@ -1,0 +1,28 @@
+{% extends "ui/base.html" %}
+{% block content %}
+  <article class="media content-section">
+     <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="#">Seller: {{ object.seller.first_name }}</a>
+            <small class="text-muted">{{ object.update_date}}</small>
+            {% if object.seller == user%}
+              <div>
+                <a class= "btn btn-secondary btn-sm mb-1"href ="{% url 'book-update' object.id%}">Update</a>
+                <a class= "btn btn-danger btn-sm mb-1"href ="{% url 'book-delete' object.id%}">Delete</a>
+                
+              </div>
+            {% else %}
+              <div>
+                <a class= "btn btn-primary btn-sm mb-1"href ="{% url 'update-cart' object.id%}">Add to Cart</a>
+              </div>
+            {% endif %}
+        </div>
+          <h2 class ="article-title">Title: {{ object.title }}</a></h2>
+          <p class="article-content">ISBN: {{ object.isbn }}</p>
+          <p class="article-content">Authors: {{ object.authors }}</p>
+          <p class="article-content">Publication Date: {{ object.publication_date |date:"F d, Y" }}</p>
+          <p class="article-content">Price: {{ object.price }}</p>
+          <p class="article-content">Quantity: {{ object.quantity }}</p>
+      </div>
+  </article>
+{% endblock content %}
