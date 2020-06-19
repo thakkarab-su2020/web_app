@@ -1,13 +1,18 @@
 
 from django.urls import path
-from .views import BookListView, BookDetailView, BookCreateView, BookUpdateView, BookDeleteView,ProductSummaryView
+from .views import BookListView, BookDetailView, BookUpdateView, BookDeleteView,ProductSummaryView
 from . import views 
+from django.conf import settings
+from django.conf.urls.static import static 
 
 urlpatterns = [
     path('', BookListView.as_view(), name='ui-home'),
     path('about/',views.about, name='ui-about'),
     path('book/<int:pk>/', BookDetailView.as_view(), name='book-detail'),
-    path('book/new/', BookCreateView.as_view(), name='book-create'),
+    # path('book/new/', BookCreateView.as_view(), name='book-create'),
+    path('book/new/', views.post, name='book-create'),
+    # path('deleteimage/', views.delete_image, name='delete-image'),
+    # path('deleteimage/<int:pk>', ImageDeleteView.as_view(), name='delete-image'),
     path('book/<int:pk>/update/', BookUpdateView.as_view(), name='book-update'),
     path('book/<int:pk>/delete/', BookDeleteView.as_view(), name='book-delete'),
     path('book/cart/', ProductSummaryView.as_view(), name='product-summary'),
@@ -17,3 +22,5 @@ urlpatterns = [
 
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

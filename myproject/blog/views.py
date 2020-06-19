@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Book , OrderItem, Order
+from .models import Book , OrderItem, Order , BookImage
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import (ListView, DetailView, CreateView, UpdateView, DeleteView, View)
@@ -8,8 +8,9 @@ from django.contrib import messages
 from django.utils import timezone
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
-
-
+from .forms import BookForm ,ImageForm
+from django.forms import modelformset_factory
+from django.http import HttpResponseRedirect
 
 posts = 'This is a basic signin signup web application'
 
@@ -29,6 +30,10 @@ def home(request):
 	}
 	return render(request,'ui/home.html',context)
 
+# def delete_image(request):
+#     image= Image.objects.get().delete()
+#     return HttpResponseRedirect(reverse(""))
+
 
 class BookListView(ListView):
 	model = Book
@@ -40,16 +45,48 @@ class BookDetailView(DetailView):
 	model = Book
 	template_name = 'ui/book_detail.html'
 
-class BookCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-	model = Book
-	fields = ['isbn','title', 'authors','publication_date','quantity','price']
-	template_name = 'ui/book_form.html'
-	success_message = "Book has been Added!"
+# class BookCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+# 	model = Book
+# 	form_class=BookForm   
+# 	template_name = 'ui/book_form.html'
+# 	success_message = "Book has been Added!"
 
-	def form_valid(self, form):
-		form.instance.seller = self.request.user
-		return super().form_valid(form)
+# 	def form_valid(self, form):
+# 		form.instance.seller = self.request.user
+# 		return super().form_valid(form)
 
+def post(request):
+
+    ImageFormSet = modelformset_factory(BookImage,
+                                        form=ImageForm, extra=3)
+
+    if request.method == 'POST':
+
+        bookForm = BookForm(request.POST)
+        formset = ImageFormSet(request.POST, request.FILES,
+                               queryset=BookImage.objects.none())
+
+
+        if bookForm.is_valid() and formset.is_valid():
+            book_form = bookForm.save(commit=False)
+            book_form.seller = request.user
+            book_form.save()
+
+            for form in formset.cleaned_data:
+                image = form['image']
+                photo = BookImage(book=book_form, image=image)
+                photo.save()
+            messages.success(request,
+                             "Posted!")
+            return HttpResponseRedirect("/")
+        else:
+            print (bookForm.errors, formset.errors)
+    else:
+        bookForm = BookForm()
+        formset = ImageFormSet(queryset=BookImage.objects.none())
+    return render(request, 'ui/book_form.html',
+                  {'bookForm': bookForm, 'formset': formset},
+                  )
 
 class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView ):
 	model = Book
@@ -74,6 +111,17 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 		if self.request.user == book.seller:
 			return True
 		return False
+
+# class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
+# 	model = BookImage
+# 	template_name = 'ui/product_confirm_delete.html'
+# 	success_url = '/'
+
+# 	def test_func(self):
+# 		bookimage = self.get_object()
+# 		if self.request.book == bookimage.book:
+# 			return True
+# 		return False
 
 def update_cart(request, pk):
 	item = get_object_or_404(Book, id=pk)
@@ -181,10 +229,3 @@ class ProductSummaryView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.warning(self.request, "You do not have an active order")
             return redirect("/")
-
-
-
-
-
-
-

@@ -23,6 +23,39 @@
           <p class="article-content">Publication Date: {{ object.publication_date |date:"F d, Y" }}</p>
           <p class="article-content">Price: {{ object.price }}</p>
           <p class="article-content">Quantity: {{ object.quantity }}</p>
+          {% comment %} {{object.get_pictures}} {% endcomment %}
+           {% comment %} {% for image in object.get_pictures %} {% endcomment %}
+ 
+            {% comment %} <img class="img-thumbnail" src="{{image.image.url}}"> {% endcomment %}
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  
+                  {% for image in object.get_pictures %}
+                  <div class="carousel-item {% if forloop.first %} active{% endif %}">
+                    <img class="d-block w-100" src="{{ image.image.url }}" alt="Second slide" >
+                  </div>
+                  {% endfor %}
+                
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+              {% comment %} <a class= "btn btn-danger btn-sm mb-1"href ="{% url 'delete-image' image.id %}">Delete Image</a> {% endcomment %}
+            {% comment %} {% endfor %}  {% endcomment %}
+          
+        </div>
+          
       </div>
   </article>
 {% endblock content %}
+
+
+
+
+
