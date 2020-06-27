@@ -26,7 +26,7 @@ workflows:
     jobs:
       - build
       - aws-code-deploy/deploy:
-          application-name: csye6225-web_app
+          application-name: csye6225-webapp
           bundle-bucket: codedeploy.abhithakkar.me
           bundle-key: web_app.zip
           deployment-group: csye6225-webapp-deployment
