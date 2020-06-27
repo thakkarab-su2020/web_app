@@ -7,6 +7,7 @@
 				<fieldset class= "form-group">
 					<legend class= "border-bottom mb-4">Post Product</legend>
 						{{ bookForm|crispy }}
+						{{ form|crispy }}
 					{{ formset.management_form }}
     				{% for form in formset %}
         				{{ form|crispy }}

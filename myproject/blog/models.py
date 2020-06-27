@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django import forms
 from django.urls import reverse
+import os
+from django.conf import settings
 
 
 class Book(models.Model):
@@ -24,6 +26,11 @@ class Book(models.Model):
 	def get_pictures(self):
 		return self.pictures.all()
 
+	def get_absolute_url(self):
+     		return reverse('book-detail', kwargs={'pk' : self.pk})
+  
+  	
+
 class BookImage(models.Model):
     book=models.ForeignKey(Book, default=None, on_delete=models.CASCADE, related_name='pictures')
     image= models.ImageField(upload_to='pictures')
@@ -31,17 +38,16 @@ class BookImage(models.Model):
     def _str_(self):
         return self.book.title
     
+    
     # class Meta:
     #     db_table='pictures'
     
-    # def get_absolute_url(self):
-    #     return reverse('book-detail', kwargs={'pk' : self.pk})
+    def get_update_cart_url(self):
+       		return reverse("update-cart", kwargs={'pk': self.pk})
     
-    # def get_update_cart_url(self):
-    #     return reverse("update-cart", kwargs={'pk': self.pk})
+  	
     
-    # def get_delete_from_cart_url(self):
-    #     return reverse("delete-cart", kwargs={'pk': self.pk})
+  
 
 class OrderItem(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -57,6 +63,9 @@ class OrderItem(models.Model):
 
 	def get_final_price(self):
 		return self.get_total_item_price()
+
+	def get_delete_from_cart_url(self):
+        	return reverse("delete-cart", kwargs={'pk': self.pk})
 
 
 class Order(models.Model):

@@ -9,7 +9,7 @@
               <div>
                 <a class= "btn btn-secondary btn-sm mb-1"href ="{% url 'book-update' object.id%}">Update</a>
                 <a class= "btn btn-danger btn-sm mb-1"href ="{% url 'book-delete' object.id%}">Delete</a>
-                
+                 <a class= "btn btn-primary btn-sm mb-1"href ="{% url 'add-image' object.id%}">Add Image</a>
               </div>
             {% else %}
               <div>
@@ -31,9 +31,15 @@
                 <div class="carousel-inner">
                   
                   {% for image in object.get_pictures %}
+                 
+                
                   <div class="carousel-item {% if forloop.first %} active{% endif %}">
                     <img class="d-block w-100" src="{{ image.image.url }}" alt="Second slide" >
+                    <p>
+                     <h5> <a class= "btn btn-danger btn-sm mb-1"href ="{% url 'delete-image' object.id image.id %}" style="margin-left:250px;">Delete Image</a> </h5>
+                    </p>
                   </div>
+                 
                   {% endfor %}
                 
                 </div>
@@ -46,7 +52,7 @@
                   <span class="sr-only">Next</span>
                 </a>
               </div>
-              {% comment %} <a class= "btn btn-danger btn-sm mb-1"href ="{% url 'delete-image' image.id %}">Delete Image</a> {% endcomment %}
+              
             {% comment %} {% endfor %}  {% endcomment %}
           
         </div>
