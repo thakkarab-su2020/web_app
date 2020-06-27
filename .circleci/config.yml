@@ -14,7 +14,7 @@ jobs:
           command: |
             pwd
             ls -al
-            zip -r web_app.zip web_app/
+            zip -r web_app.zip . -i web_app/
             echo "Zip Done"
             sudo chmod 775 web_app.zip
             ls -al
