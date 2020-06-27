@@ -25,6 +25,7 @@ workflows:
   deploy_application:
     jobs:
       - build
+      #comments
   #     - aws-code-deploy/deploy:
   #         application-name: csye6225-web_app
   #         bundle-bucket: codedeploy-kmvanesa-me
