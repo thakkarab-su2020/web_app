@@ -11,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .forms import BookForm ,ImageForm
 from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 posts = 'This is a basic signin signup web application'
 
@@ -101,6 +102,21 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 
 		return False
 
+
+class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView, ):
+    form_class = ImageForm
+    model = BookImage
+    template_name = 'ui/image_add.html'
+    success_message = "Image has been Added!"
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.book = Book.objects.get(pk=self.kwargs['pk'])
+        BookImage = form.save()
+        BookImage.save()
+        return super().form_valid(form)
+
+
 class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 	model = Book
 	template_name = 'ui/product_confirm_delete.html'
@@ -112,17 +128,16 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 			return True
 		return False
 
-# class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
-# 	model = BookImage
-# 	template_name = 'ui/product_confirm_delete.html'
-# 	success_url = '/'
+class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
+	model = BookImage
+	template_name = 'ui/image_confirm_delete.html'
+	success_url = '/'
 
-# 	def test_func(self):
-# 		bookimage = self.get_object()
-# 		if self.request.book == bookimage.book:
-# 			return True
-# 		return False
+	def test_func(self):
+		bookimage = self.get_object()
+		return True
 
+@login_required
 def update_cart(request, pk):
 	item = get_object_or_404(Book, id=pk)
 	order_item, created = OrderItem.objects.get_or_create(item = item,user= request.user,ordered=False)
