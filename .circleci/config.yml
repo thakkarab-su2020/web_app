@@ -25,13 +25,12 @@ workflows:
   deploy_application:
     jobs:
       - build
-      #comments
-  #     - aws-code-deploy/deploy:
-  #         application-name: csye6225-web_app
-  #         bundle-bucket: codedeploy-kmvanesa-me
-  #         bundle-key: web_app.zip
-  #         deployment-group: csye6225-webapp-deployment
-  #         service-role-arn: arn:aws:iam::708581696554:roleCodeDeployServiceRole
+      - aws-code-deploy/deploy:
+          application-name: csye6225-webapp
+          bundle-bucket: codedeploy.abhithakkar.me
+          bundle-key: web_app
+          deployment-group: csye6225-webapp-deployment
+          service-role-arn: arn:aws:iam::682607698449 :roleCodeDeployServiceRole
 
 
 
