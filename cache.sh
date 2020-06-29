@@ -1,8 +1,8 @@
 #! /bin/bash
 cd /home/ubuntu/
-DIR=/home/ubuntu/DjangoApp1
+DIR=/home/ubuntu/myproject
 if [ -d "$DIR" ]; then
-    sudo rm -rf DjangoApp1/
+    sudo rm -rf myproject/
     sudo systemctl daemon-reload
     sudo systemctl restart gunicorn
     sudo nginx -t && sudo systemctl restart nginx
