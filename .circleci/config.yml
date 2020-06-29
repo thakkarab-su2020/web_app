@@ -14,9 +14,9 @@ jobs:
           command: |
             pwd
             ls -al
-            zip -r web_app.zip . -i web_app/
+            zip -r myproject.zip myproject/
             echo "Zip Done"
-            sudo chmod 775 web_app.zip
+            sudo chmod 775 myproject.zip
             ls -al
       - aws-s3/copy:
           from: web_app.zip
