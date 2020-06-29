@@ -7,7 +7,9 @@ source venv/bin/activate
 pip3 install -r myproject/requirements.txt
 sudo chown ubuntu:www-data -R /home/ubuntu/myproject/
 sudo chmod 775 -R /home/ubuntu/myproject/
+source export.sh
 python3 myproject/manage.py migrate
+source export.sh
 python3 myproject/manage.py collectstatic -y
 sudo cp myproject/deploy/gunicorn.service /etc/systemd/system/
 sudo systemctl start gunicorn
