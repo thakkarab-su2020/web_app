@@ -1,27 +1,10 @@
-
 version: 0.0
 os: linux
 files:
   - source: /
     destination: /home/ubuntu/
-permissions:
-  - object: /home/ubuntu/
-    pattern: "**"
-    owner: ubuntu
-    group: ubuntu
-    mode: 755
-    type:
-       - file
 hooks:
-  ApplicationInstall:
-    - location: scripts/install_dependencies.sh
-      timeout: 1000
-      runas: root
   ApplicationStart:
-    - location: scripts/start_server.sh
-      timeout: 1000
-      runas: root
-  ApplicationStop:
-    - location: scripts/stop_server.sh
-      timeout: 1000
-      runas: root
+    - location: install.sh
+      runas: ubuntu
+      

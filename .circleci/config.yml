@@ -14,12 +14,12 @@ jobs:
           command: |
             pwd
             ls -al
-            zip -r web_app.zip . -i web_app/
+            zip -r myproject.zip myproject/
             echo "Zip Done"
-            sudo chmod 775 web_app.zip
+            sudo chmod 775 myproject.zip
             ls -al
       - aws-s3/copy:
-          from: web_app.zip
+          from: myproject.zip
           to: s3://codedeploy.abhithakkar.me
 workflows:
   deploy_application:
@@ -28,7 +28,7 @@ workflows:
       - aws-code-deploy/deploy:
           application-name: csye6225-webapp
           bundle-bucket: codedeploy.abhithakkar.me
-          bundle-key: web_app
+          bundle-key: myproject
           deployment-group: csye6225-webapp-deployment
           service-role-arn: arn:aws:iam::682607698449 :roleCodeDeployServiceRole
 
