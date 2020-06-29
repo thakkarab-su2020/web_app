@@ -4,6 +4,9 @@ files:
   - source: /
     destination: /home/ubuntu/
 hooks:
+  BeforeInstall:
+    - location: cache.sh
+      runas: ubuntu
   ApplicationStart:
     - location: install.sh
       runas: ubuntu

@@ -14,6 +14,8 @@ python3 myproject/manage.py collectstatic -y
 sudo cp myproject/deploy/gunicorn.service /etc/systemd/system/
 sudo systemctl start gunicorn
 sudo systemctl enable gunicorn
+sudo systemctl daemon-reload
+sudo systemctl restart gunicorn
 sudo cp myproject/deploy/myproject /etc/nginx/sites-available/
 sudo ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled
 sudo nginx -t && sudo systemctl restart nginx
