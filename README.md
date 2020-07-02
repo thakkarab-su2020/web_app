@@ -1,4 +1,4 @@
-# web-app
+# WEB-APP
 
 # Django-APP-Project
 
