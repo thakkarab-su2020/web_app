@@ -12,6 +12,9 @@ from .forms import BookForm ,ImageForm
 from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+import logging
+logger = logging.getLogger(__name__)
+
 
 posts = 'This is a basic signin signup web application'
 
@@ -79,6 +82,7 @@ def post(request):
                 photo.save()
             messages.success(request,
                              "Posted!")
+            logger.info("user added a product")
             return HttpResponseRedirect("/")
         else:
             print (bookForm.errors, formset.errors)
@@ -94,9 +98,11 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 	fields = ['isbn','title', 'authors','publication_date','quantity','price']
 	template_name = 'ui/book_form.html'
 	success_message = "Book has been updated!"
+	
 
 	def test_func(self):
 		book = self.get_object()
+		logger.info("user updated the book")
 		if self.request.user == book.seller:
 			return True
 
@@ -109,9 +115,11 @@ class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView, ):
     template_name = 'ui/image_add.html'
     success_message = "Image has been Added!"
     success_url = '/'
+    
 
     def form_valid(self, form):
         form.instance.book = Book.objects.get(pk=self.kwargs['pk'])
+        logger.info("user added the image")
         BookImage = form.save()
         BookImage.save()
         return super().form_valid(form)
@@ -121,9 +129,11 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 	model = Book
 	template_name = 'ui/product_confirm_delete.html'
 	success_url = '/'
+	
 
 	def test_func(self):
 		book = self.get_object()
+		logger.info("user deleted the book")
 		if self.request.user == book.seller:
 			return True
 		return False
@@ -132,9 +142,11 @@ class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 	model = BookImage
 	template_name = 'ui/image_confirm_delete.html'
 	success_url = '/'
+	
 
 	def test_func(self):
 		bookimage = self.get_object()
+		logger.info("user deleted the image")
 		return True
 
 @login_required
@@ -168,6 +180,7 @@ def update_cart(request, pk):
 		item.quantity -= 1
 		item.save()
 		messages.info(request, "Product has been added to the cart")
+		logger.info("user added a product to the cart")
 		return redirect("product-summary")
 
 
@@ -183,6 +196,7 @@ def delete_from_cart(request, pk):
 			order.items.remove(order_item)
 			order_item.delete()
 			messages.info(request, "Product removed from the cart")
+			logger.info("user deleted the product from the cart")
 			return redirect("product-summary")
 		else:
 			messages.info(request, "Product is not in the cart")
@@ -204,6 +218,7 @@ def delete_single_item(request, pk):
 				item.quantity +=1
 				item.save()
 				messages.info(request, "Product removed from the cart")
+				logger.info("user deleted the product from the cart")
 				return redirect("product-summary")
 
 			else:
