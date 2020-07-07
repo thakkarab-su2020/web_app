@@ -37,6 +37,38 @@ AWS_STORAGE_BUCKET_NAME = os.environ['bucket']
 ALLOWED_HOSTS = ['*']
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR+'/../myproject.log',
+            'formatter':'detailed',
+        },
+    },
+    'formatters': {
+        'detailed': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+            }
+    },
+    'loggers': {
+        'users': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'blog': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+
+
+
 # Application definition
 
 INSTALLED_APPS = [

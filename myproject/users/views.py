@@ -7,6 +7,10 @@ from django.contrib.auth import update_session_auth_hash,login,authenticate
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from blog.views import home
+import logging
+logger = logging.getLogger(__name__)
+
+
 def register(request):
 	if request.method == 'POST':
 		form = UserRegisterForm(request.POST)
@@ -17,6 +21,7 @@ def register(request):
 			user = authenticate(username=username,password=password)
 			login(request,user)
 			messages.success(request, "Account created for {}!  And you are now logged in!".format(username))
+			logger.info("user account has been created")
 			return redirect('profile')
 	else:
 		form = UserRegisterForm()
@@ -31,6 +36,7 @@ def profile(request):
 		if u_form.is_valid():
 			u_form.save()
 			messages.success(request, "Account has been updated")
+			logger.info("user account has been updated")
 			return redirect('profile')
 	else:
 		u_form = UserUpdateForm( instance=request.user)
@@ -51,6 +57,7 @@ def change_password(request):
 			form.save()
 			update_session_auth_hash(request, form.user)
 			messages.success(request, "Your Password has been updated!")
+			logger.info("user updated the password")
 			return redirect('profile')
 		else:
 			
