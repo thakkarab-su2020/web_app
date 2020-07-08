@@ -39,6 +39,7 @@ def home(request):
 # def delete_image(request):
 #     image= Image.objects.get().delete()
 #     return HttpResponseRedirect(reverse(""))
+#safkjbe
 
 
 class BookListView(ListView):
