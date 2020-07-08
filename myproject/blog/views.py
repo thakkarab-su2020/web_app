@@ -77,7 +77,7 @@ def post(request):
             book_form = bookForm.save(commit=False)
             book_form.seller = request.user
             book_form.save()
-            timer = metric.timer('create')
+            timer = metric.timer('create book')
             timer.start()
             for form in formset.cleaned_data:
                 image = form['image']
@@ -85,6 +85,7 @@ def post(request):
                 photo.save()
             messages.success(request, 'Posted!')
             logger.info('user added a product')
+            metric.incr('books')
             timer.stop()
             return HttpResponseRedirect('/')
         else:
@@ -113,7 +114,7 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin,
 
     def test_func(self):
         book = self.get_object()
-        timer = metric.timer('update')
+        timer = metric.timer('update book')
         timer.start()
         logger.info('user updated the book')
         if self.request.user == book.seller:
@@ -139,6 +140,7 @@ class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         BookImage = form.save()
         BookImage.save()
         timer.stop()
+        metric.incr('image')
         return super().form_valid(form)
 
 
@@ -210,6 +212,7 @@ def update_cart(request, pk):
         item.save()
         messages.info(request, 'Product has been added to the cart')
         logger.info('user added a product to the cart')
+        metric.incr('cart')
         return redirect('product-summary')
 
 
@@ -227,6 +230,7 @@ def delete_from_cart(request, pk):
             order_item.delete()
             messages.info(request, 'Product removed from the cart')
             logger.info('user deleted the product from the cart')
+            metric.incr('cart')
             return redirect('product-summary')
         else:
             messages.info(request, 'Product is not in the cart')

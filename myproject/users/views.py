@@ -9,6 +9,8 @@ from django.urls import reverse
 from blog.views import home
 import logging
 logger = logging.getLogger(__name__)
+from statsd import StatsClient
+metric = StatsClient()
 
 
 def register(request):
@@ -20,8 +22,11 @@ def register(request):
 			password = form.cleaned_data.get('password1')
 			user = authenticate(username=username,password=password)
 			login(request,user)
+			timer = metric.timer('registration of user')
+			timer.start()
 			messages.success(request, "Account created for {}!  And you are now logged in!".format(username))
 			logger.info("user account has been created")
+			timer.stop()
 			return redirect('profile')
 	else:
 		form = UserRegisterForm()
@@ -35,8 +40,11 @@ def profile(request):
 		u_form = UserUpdateForm(request.POST, instance=request.user)
 		if u_form.is_valid():
 			u_form.save()
+			timer = metric.timer('user account update')
+			timer.start()
 			messages.success(request, "Account has been updated")
 			logger.info("user account has been updated")
+			timer.stop()
 			return redirect('profile')
 	else:
 		u_form = UserUpdateForm( instance=request.user)
@@ -55,9 +63,12 @@ def change_password(request):
 		
 		if form.is_valid():
 			form.save()
+			timer = metric.timer('password update')
+			timer.start()
 			update_session_auth_hash(request, form.user)
 			messages.success(request, "Your Password has been updated!")
 			logger.info("user updated the password")
+			timer.stop()
 			return redirect('profile')
 		else:
 			
