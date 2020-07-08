@@ -14,6 +14,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 import logging
 logger = logging.getLogger(__name__)
+from statsd import StatsClient
+metric=StatsClient()
 
 
 posts = 'This is a basic signin signup web application'
@@ -67,6 +69,7 @@ def post(request):
     if request.method == 'POST':
 
         bookForm = BookForm(request.POST)
+        
         formset = ImageFormSet(request.POST, request.FILES,
                                queryset=BookImage.objects.none())
 
@@ -75,6 +78,8 @@ def post(request):
             book_form = bookForm.save(commit=False)
             book_form.seller = request.user
             book_form.save()
+            timer=metric.timer('create')
+            timer.start()
 
             for form in formset.cleaned_data:
                 image = form['image']
@@ -83,6 +88,7 @@ def post(request):
             messages.success(request,
                              "Posted!")
             logger.info("user added a product")
+            timer.stop()
             return HttpResponseRedirect("/")
         else:
             print (bookForm.errors, formset.errors)
@@ -102,8 +108,11 @@ class BookUpdateView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixi
 
 	def test_func(self):
 		book = self.get_object()
+		timer=metric.timer('update')
+  		timer.start()
 		logger.info("user updated the book")
 		if self.request.user == book.seller:
+			timer.stop()
 			return True
 
 		return False
@@ -120,8 +129,11 @@ class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView, ):
     def form_valid(self, form):
         form.instance.book = Book.objects.get(pk=self.kwargs['pk'])
         logger.info("user added the image")
+        timer=metric.timer('add image')
+        timer.start()
         BookImage = form.save()
         BookImage.save()
+        timer.stop()
         return super().form_valid(form)
 
 
@@ -134,7 +146,10 @@ class BookDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 	def test_func(self):
 		book = self.get_object()
 		logger.info("user deleted the book")
+		timer=metric.timer('delete book')
+  		timer.start()
 		if self.request.user == book.seller:
+			timer.stop()
 			return True
 		return False
 
@@ -146,7 +161,10 @@ class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,DeleteView):
 
 	def test_func(self):
 		bookimage = self.get_object()
+		timer=metric.timer('delete image')
+  		timer.start()
 		logger.info("user deleted the image")
+		timer.stop()
 		return True
 
 @login_required

@@ -25,6 +25,10 @@ SECRET_KEY = 'o#$tl2nezwsj(zto!oiqx2crv1hwqhi1570chv2py)4rz)%38%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+STATSD_HOST= '*'
+STATSD_PORT='8125'
+STATSD_PREFIX= None
+
 # ALLOWED_HOSTS = []
 
 AWS_ACCESS_KEY_ID = os.environ['access_key']
