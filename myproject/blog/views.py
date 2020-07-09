@@ -140,7 +140,6 @@ class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         BookImage = form.save()
         BookImage.save()
         timer.stop()
-        metric.incr('image')
         return super().form_valid(form)
 
 
