@@ -23,7 +23,7 @@ jobs:
           command: |
             ls -al
             aws s3 cp myproject.zip s3://codedeploy.abhithakkar.me
-            aws deploy create-deployment --application-name csye6225-webapp --deployment-group-name csye6225-webapp-deployment --description "CSYE6225" --region us-east-1 --s3-location bucket=codedeploy-abhithakkar.me,bundleType=zip,key=myproject.zip
+            aws deploy create-deployment --application-name csye6225-webapp --deployment-group-name csye6225-webapp-deployment --description "CSYE6225" --region us-east-1 --s3-location bucket=codedeploy.abhithakkar.me,bundleType=zip,key=myproject.zip
 
 
 
