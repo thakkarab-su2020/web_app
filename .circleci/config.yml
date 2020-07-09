@@ -14,7 +14,7 @@ jobs:
             sudo apt-get update -y
             sudo apt-get install -y less
             ls -al
-            zip -r myproject.zip myproject/appspec.yml install.sh cache.sh
+            zip -r myproject.zip myproject/ appspec.yml install.sh cache.sh
             echo "Zip Done"
             sudo chmod 775 myproject.zip
             ls -al
