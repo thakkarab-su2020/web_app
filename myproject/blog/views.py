@@ -35,7 +35,7 @@ def home(request):
 # def delete_image(request):
 #     image= Image.objects.get().delete()
 #     return HttpResponseRedirect(reverse(""))
-# safkjbe
+
 
 class BookListView(ListView):
 
@@ -49,6 +49,10 @@ class BookDetailView(DetailView):
 
     model = Book
     template_name = 'ui/book_detail.html'
+    
+    def log(self):
+        logger.info("abcd")
+    
 
 
 # class BookCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
@@ -133,6 +137,7 @@ class AddImage(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     success_url = '/'
 
     def form_valid(self, form):
+        logger.info('user is in book list view')
         form.instance.book = Book.objects.get(pk=self.kwargs['pk'])
         logger.info('user added the image')
         timer = metric.timer('add image')
@@ -172,13 +177,14 @@ class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,
         bookimage = self.get_object()
         timer = metric.timer('delete image')
         timer.start()
-        logger.info('user deleted the image')
+        logger.info('user deleted the image from s3')
         timer.stop()
         return True
 
 
 @login_required
 def update_cart(request, pk):
+    logger.info('user is in book list view')
     item = get_object_or_404(Book, id=pk)
     (order_item, created) = OrderItem.objects.get_or_create(item=item,
             user=request.user, ordered=False)
@@ -194,23 +200,29 @@ def update_cart(request, pk):
             item.quantity -= 1
             item.save()
             messages.info(request, 'Product added to the cart')
+            logger.info('user added a product to the cart')
+            
             return redirect('product-summary')
         else:
+            
             order.items.add(order_item)
             item.quantity -= 1
             item.save()
             messages.info(request, 'Product added to the cart')
+            logger.info('user added a product to the cart')
+            
             return redirect('book-detail', pk=pk)
     else:
-
+        
         ordered_date = timezone.now()
         order = Order.objects.create(user=request.user,
                 ordered_date=ordered_date)
-        order_items.add(order_item)
+        order.items.add(order_item)
         item.quantity -= 1
         item.save()
         messages.info(request, 'Product has been added to the cart')
         logger.info('user added a product to the cart')
+        
         metric.incr('cart')
         return redirect('product-summary')
 
