@@ -206,7 +206,7 @@ def update_cart(request, pk):
         ordered_date = timezone.now()
         order = Order.objects.create(user=request.user,
                 ordered_date=ordered_date)
-        order_items.add(order_items)
+        order_items.add(order_item)
         item.quantity -= 1
         item.save()
         messages.info(request, 'Product has been added to the cart')
