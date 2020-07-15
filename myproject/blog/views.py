@@ -184,6 +184,7 @@ class ImageDeleteView(LoginRequiredMixin, UserPassesTestMixin,
 
 @login_required
 def update_cart(request, pk):
+    logger.info('user is in book list view')
     item = get_object_or_404(Book, id=pk)
     (order_item, created) = OrderItem.objects.get_or_create(item=item,
             user=request.user, ordered=False)
@@ -200,16 +201,19 @@ def update_cart(request, pk):
             item.save()
             messages.info(request, 'Product added to the cart')
             logger.info('user added a product to the cart')
+            
             return redirect('product-summary')
         else:
+            
             order.items.add(order_item)
             item.quantity -= 1
             item.save()
             messages.info(request, 'Product added to the cart')
             logger.info('user added a product to the cart')
+            
             return redirect('book-detail', pk=pk)
     else:
-
+        
         ordered_date = timezone.now()
         order = Order.objects.create(user=request.user,
                 ordered_date=ordered_date)
@@ -218,6 +222,7 @@ def update_cart(request, pk):
         item.save()
         messages.info(request, 'Product has been added to the cart')
         logger.info('user added a product to the cart')
+        
         metric.incr('cart')
         return redirect('product-summary')
 
