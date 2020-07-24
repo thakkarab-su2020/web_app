@@ -31,12 +31,12 @@ STATSD_PREFIX= None
 
 # ALLOWED_HOSTS = []
 
-# AWS_ACCESS_KEY_ID = os.environ['access_key']
-# AWS_SECRET_ACCESS_KEY = os.environ['secret_key']
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = "public-read-write"
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_STORAGE_BUCKET_NAME = os.environ['bucket']
+AWS_ACCESS_KEY_ID = os.environ['access_key']
+AWS_SECRET_ACCESS_KEY = os.environ['secret_key']
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = "public-read-write"
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_STORAGE_BUCKET_NAME = os.environ['bucket']
 
 ALLOWED_HOSTS = ['*']
 
@@ -142,28 +142,28 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
-        "USER": "Abhi",
-        "PASSWORD": "0072707",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
-    }
-}
-
-# host=os.environ['endpoint']
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": os.environ['db_name'],
-#         "USER": os.environ['db_user'],
-#         "PASSWORD": os.environ['db_pass'],
-#         "HOST": host,
+#         "NAME": "postgres",
+#         "USER": "Abhi",
+#         "PASSWORD": "0072707",
+#         "HOST": "127.0.0.1",
 #         "PORT": "5432",
 #     }
 # }
+
+host=os.environ['endpoint']
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ['db_name'],
+        "USER": os.environ['db_user'],
+        "PASSWORD": os.environ['db_pass'],
+        "HOST": host,
+        "PORT": "5432",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
