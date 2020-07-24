@@ -108,7 +108,7 @@ def password_reset(request):
                 msg={"username": username,"token":str(token)}
                 print(msg)
                 response = client.publish(
-                    TargetArn='arn:aws:sns:us-east-1:708581696554:user-updates-pwd',
+                    TargetArn='arn:aws:sns:us-east-1:682607698449:sns_topic',
                     Message=json.dumps(msg),
                     MessageAttributes={
                     'username': {
