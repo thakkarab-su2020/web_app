@@ -162,6 +162,12 @@ DATABASES = {
         "PASSWORD": os.environ['db_pass'],
         "HOST": host,
         "PORT": "5432",
+        'OPTIONS': {
+                'sslmode': 'verify-full',
+                'sslrootcert': (BASE_DIR+'/rds-ca-2019-root.pem')
+            },
+
+
     }
 }
 
