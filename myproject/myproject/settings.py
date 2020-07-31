@@ -223,3 +223,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = 'abhithakkar619@gmail.com'
 # EMAIL_HOST_PASSWORD = '007Jjalaram'
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
