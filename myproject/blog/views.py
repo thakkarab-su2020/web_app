@@ -68,7 +68,7 @@ class BookDetailView(DetailView):
 def post(request):
 
     ImageFormSet = modelformset_factory(BookImage, form=ImageForm,
-            extra=3)
+            extra=1)
 
     if request.method == 'POST':
 
